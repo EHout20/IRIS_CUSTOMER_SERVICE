@@ -120,3 +120,76 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* CLI Text Size Customizations */
+@layer components {
+  /* Make command bar input larger */
+  [data-slot="command-input"] {
+    @apply text-lg;
+  }
+  
+  /* Make command items larger */
+  [data-slot="command-item"] {
+    @apply text-base;
+  }
+  
+  /* Make command group headings larger */
+  [data-slot="command-group"] [cmdk-group-heading] {
+    @apply text-sm;
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient {
+  background: linear-gradient(-45deg, #2419b9, #16479c, #06d493, #8f29ee);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+
+ .starry-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: black;
+  overflow: hidden;
+  position: relative;
+}
+
+.starry-background::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  box-shadow:
+    20px 30px white,
+    40px 80px white,
+    60px 120px white,
+    100px 200px white,
+    150px 250px white,
+    200px 300px white,
+    300px 400px white,
+    400px 500px white;
+  animation: twinkle 2s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}

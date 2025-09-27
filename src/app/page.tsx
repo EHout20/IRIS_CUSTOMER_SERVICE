@@ -14,7 +14,6 @@ import FBXViewer from '@/components/FBXViewer';
 // Wrapper to link FBXViewer to Cedar agent state
 function AvatarWithAgentState() {
   // Subscribe to Cedar state for agent thinking/responding
-  // You can add more logic here if you want to distinguish "thinking" vs "responding"
   const [isTalking, setIsTalking] = React.useState(false);
   useRegisterState({
     key: 'isTalking',
@@ -34,9 +33,8 @@ import Transcript from '@/components/Transcript';
 import { CedarCaptionChat } from '@/cedar/components/chatComponents/CedarCaptionChat';
 
 export default function HomePage() {
-
   // Cedar state for the main text that can be changed by the agent
-  const [mainText, setMainText] = React.useState('tell Cedar to change me');
+  const [mainText, setMainText] = React.useState('Tell Cedar to change me');
 
   // Cedar state for dynamically added text lines
   const [textLines, setTextLines] = React.useState<string[]>([]);
@@ -44,39 +42,39 @@ export default function HomePage() {
   // Cedar state for transcript visibility
   const [transcriptVisible, setTranscriptVisible] = React.useState(true);
 
-    // Cedar state for whether the agent is talking
-    const [isTalking, setIsTalking] = React.useState(false);
+  // Cedar state for whether the agent is talking
+  const [isTalking, setIsTalking] = React.useState(false);
 
-    // Register isTalking as Cedar state
-    useRegisterState({
-      key: 'isTalking',
-      description: 'Whether the agent is currently talking (controls avatar animation)',
-      value: isTalking,
-      setValue: setIsTalking,
-      stateSetters: {
-        setTalking: {
-          name: 'setTalking',
-          description: 'Set the agent to talking mode (shows talking animation)',
-          argsSchema: z.object({}),
-          execute: (current: boolean, setValue: (v: boolean) => void, args: {}) => {
-            setValue(true);
-          },
-        },
-        setIdle: {
-          name: 'setIdle',
-          description: 'Set the agent to idle mode (shows idle animation)',
-          argsSchema: z.object({}),
-          execute: (current: boolean, setValue: (v: boolean) => void, args: {}) => {
-            setValue(false);
-          },
+  // Register isTalking as Cedar state
+  useRegisterState({
+    key: 'isTalking',
+    description: 'Whether the agent is currently talking (controls avatar animation)',
+    value: isTalking,
+    setValue: setIsTalking,
+    stateSetters: {
+      setTalking: {
+        name: 'setTalking',
+        description: 'Set the agent to talking mode (shows talking animation)',
+        argsSchema: z.object({}),
+        execute: (current: boolean, setValue: (v: boolean) => void) => {
+          setValue(true);
         },
       },
-    });
+      setIdle: {
+        name: 'setIdle',
+        description: 'Set the agent to idle mode (shows idle animation)',
+        argsSchema: z.object({}),
+        execute: (current: boolean, setValue: (v: boolean) => void) => {
+          setValue(false);
+        },
+      },
+    },
+  });
 
-    useSubscribeStateToAgentContext('isTalking', (isTalking) => ({ isTalking }), {
-      showInChat: true,
-      color: '#F59E42',
-    });
+  useSubscribeStateToAgentContext('isTalking', (isTalking) => ({ isTalking }), {
+    showInChat: true,
+    color: '#F59E42',
+  });
 
   // Register the main text as Cedar state with a state setter
   useRegisterState({
@@ -91,11 +89,7 @@ export default function HomePage() {
         argsSchema: z.object({
           newText: z.string().min(1, 'Text cannot be empty').describe('The new text to display'),
         }),
-        execute: (
-          currentText: string,
-          setValue: (newValue: string) => void,
-          args: { newText: string },
-        ) => {
+        execute: (currentText: string, setValue: (newValue: string) => void, args: { newText: string }) => {
           setValue(args.newText);
         },
       },
@@ -119,11 +113,7 @@ export default function HomePage() {
         name: 'showTranscript',
         description: 'Show the accessibility transcript panel',
         argsSchema: z.object({}),
-        execute: (
-          currentVisible: boolean,
-          setValue: (newValue: boolean) => void,
-          args: {},
-        ) => {
+        execute: (_, setValue: (newValue: boolean) => void) => {
           setValue(true);
         },
       },
@@ -131,11 +121,7 @@ export default function HomePage() {
         name: 'hideTranscript',
         description: 'Hide the accessibility transcript panel',
         argsSchema: z.object({}),
-        execute: (
-          currentVisible: boolean,
-          setValue: (newValue: boolean) => void,
-          args: {},
-        ) => {
+        execute: (_, setValue: (newValue: boolean) => void) => {
           setValue(false);
         },
       },
@@ -143,11 +129,7 @@ export default function HomePage() {
         name: 'toggleTranscript',
         description: 'Toggle the visibility of the accessibility transcript panel',
         argsSchema: z.object({}),
-        execute: (
-          currentVisible: boolean,
-          setValue: (newValue: boolean) => void,
-          args: {},
-        ) => {
+        execute: (currentVisible: boolean, setValue: (newValue: boolean) => void) => {
           setValue(!currentVisible);
         },
       },
@@ -166,27 +148,20 @@ export default function HomePage() {
     description: 'Add a new line of text to the screen via frontend tool',
     argsSchema: z.object({
       text: z.string().min(1, 'Text cannot be empty').describe('The text to add to the screen'),
-      style: z
-        .enum(['normal', 'bold', 'italic', 'highlight'])
-        .optional()
-        .describe('Text style to apply'),
+      style: z.enum(['normal', 'bold', 'italic', 'highlight']).optional().describe('Text style to apply'),
     }),
     execute: async (args: { text: string; style?: 'normal' | 'bold' | 'italic' | 'highlight' }) => {
       const styledText =
         args.style === 'bold'
           ? `**${args.text}**`
           : args.style === 'italic'
-            ? `*${args.text}*`
-            : args.style === 'highlight'
-              ? `🌟 ${args.text} 🌟`
-              : args.text;
+          ? `*${args.text}*`
+          : args.style === 'highlight'
+          ? `🌟 ${args.text} 🌟`
+          : args.text;
       setTextLines((prev) => [...prev, styledText]);
     },
   });
-
-
-
-
 
   // Register talking action tools
   useRegisterFrontendTool({
@@ -198,10 +173,7 @@ export default function HomePage() {
       context: z.string().optional().describe('Additional context'),
     }),
     execute: async (args: { actionId: string; parameters: Record<string, any>; context?: string }) => {
-      // This would integrate with your talking action system
       console.log(`Executing talking action: ${args.actionId}`, args.parameters);
-      
-      // Add visual feedback to the user
       setTextLines((prev) => [...prev, `🗣️ **Talking Action:** ${args.actionId} ${args.context ? `(${args.context})` : ''}`]);
     },
   });
@@ -215,12 +187,9 @@ export default function HomePage() {
       duration: z.enum(['this-message', 'short-term', 'conversation']).optional().describe('Duration'),
     }),
     execute: async (args: { style: string; intensity?: number; duration?: string }) => {
-      // This would set the conversational style for the AI
       const intensity = args.intensity || 5;
       const duration = args.duration || 'this-message';
       console.log(`Setting talking style: ${args.style} (${intensity}/10) for ${duration}`);
-      
-      // Add visual feedback
       setTextLines((prev) => [...prev, `🎭 **Style Change:** Now using ${args.style} style (intensity: ${intensity}/10)`]);
     },
   });
@@ -234,7 +203,6 @@ export default function HomePage() {
       type: z.enum(['ai', 'system']).optional().describe('Type of message (default: ai)'),
     }),
     execute: async (args: { text: string; type?: 'ai' | 'system' }) => {
-      // Add to transcript via global method
       if (typeof window !== 'undefined' && (window as any).addTranscriptEntry) {
         (window as any).addTranscriptEntry(args.text, args.type || 'ai');
       }
@@ -250,7 +218,6 @@ export default function HomePage() {
     }),
     execute: async (args: { action: 'show' | 'hide' | 'toggle' | 'check_status' }) => {
       let newVisibility = transcriptVisible;
-      
       if (args.action === 'show') {
         setTranscriptVisible(true);
         newVisibility = true;
@@ -258,49 +225,42 @@ export default function HomePage() {
         setTranscriptVisible(false);
         newVisibility = false;
       } else if (args.action === 'toggle') {
-        setTranscriptVisible(prev => {
+        setTranscriptVisible((prev) => {
           newVisibility = !prev;
           return newVisibility;
         });
       }
-      
-      // Log the status for debugging/feedback
       const status = args.action === 'check_status' ? transcriptVisible : newVisibility;
-      const message = args.action === 'check_status' 
-        ? `Transcript is currently ${transcriptVisible ? 'visible' : 'hidden'}` 
-        : `Transcript ${newVisibility ? 'shown' : 'hidden'} successfully`;
-      
-      console.log(`[Transcript Control] ${message}`, { 
-        action: args.action, 
-        transcriptVisible: status 
+      const message =
+        args.action === 'check_status'
+          ? `Transcript is currently ${transcriptVisible ? 'visible' : 'hidden'}`
+          : `Transcript ${newVisibility ? 'shown' : 'hidden'} successfully`;
+      console.log(`[Transcript Control] ${message}`, {
+        action: args.action,
+        transcriptVisible: status,
       });
-      
-      // Add visual feedback to text lines
       setTextLines((prev) => [...prev, `📝 **Transcript:** ${message}`]);
     },
   });
 
   return (
-    <div className="relative h-screen w-full">
+    <div className="relative h-screen w-full overflow-hidden">
+      {/* Background gradient */}
+      <div className="animated-gradient absolute inset-0 -z-10"></div>
+
       {/* Main interactive content area with Avatar and Transcript side by side */}
-      <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 space-y-8">
-        {/* Avatar and Transcript Container */}
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-[60vh] p-8 space-y-8">
         <div className="w-full max-w-7xl flex gap-6">
           {transcriptVisible ? (
             <>
-              {/* 3D FBX Model Viewer - Left Side */}
               <div className="max-w-2xl w-full mx-auto">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4 text-center">
                   🎭 Talking Avatar
                 </h2>
                 <AvatarWithAgentState />
               </div>
-              {/* Transcript - Right Side */}
               <div className="w-80">
-                <Transcript 
-                  isVisible={transcriptVisible}
-                  onToggleVisible={setTranscriptVisible}
-                />
+                <Transcript isVisible={transcriptVisible} onToggleVisible={setTranscriptVisible} />
               </div>
             </>
           ) : (
@@ -318,19 +278,13 @@ export default function HomePage() {
         {/* Big text that Cedar can change */}
         <div className="text-center">
           <h1 className="text-6xl font-bold text-gray-800 mb-4">{mainText}</h1>
-          <p className="text-lg text-gray-600 mb-8">
-            This text can be changed by Cedar using state setters
-          </p>
+          <p className="text-lg text-gray-600 mb-8">This text can be changed by Cedar using state setters</p>
         </div>
 
         {/* Instructions for adding new text */}
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-2">
-            tell cedar to add new lines of text to the screen
-          </h2>
-          <p className="text-md text-gray-500 mb-6">
-            Cedar can add new text using frontend tools with different styles
-          </p>
+          <h2 className="text-2xl font-semibold text-gray-700 mb-2">tell cedar to add new lines of text to the screen</h2>
+          <p className="text-md text-gray-500 mb-6">Cedar can add new text using frontend tools with different styles</p>
         </div>
 
         {/* Display dynamically added text lines */}
@@ -339,10 +293,7 @@ export default function HomePage() {
             <h3 className="text-xl font-medium text-gray-700 mb-4 text-center">Added by Cedar:</h3>
             <div className="space-y-2">
               {textLines.map((line, index) => (
-                <div
-                  key={index}
-                  className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-center"
-                >
+                <div key={index} className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-center">
                   {line.startsWith('**') && line.endsWith('**') ? (
                     <strong className="text-blue-800">{line.slice(2, -2)}</strong>
                   ) : line.startsWith('*') && line.endsWith('*') ? (
