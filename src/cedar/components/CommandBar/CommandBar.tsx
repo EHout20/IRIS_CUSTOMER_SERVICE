@@ -605,7 +605,7 @@ export const CommandBar: React.FC<CommandBarProps> = ({
 								aria-label='Message input'>
 								<EditorContent
 									editor={editor}
-									className='prose prose-sm max-w-none focus:outline-none outline-none focus:ring-0 ring-0 [&_*]:focus:outline-none [&_*]:outline-none [&_*]:focus:ring-0 [&_*]:ring-0 placeholder-gray-500 dark:placeholder-gray-400 [&_.ProseMirror]:p-0 [&_.ProseMirror]:outline-none'
+									className='prose prose-base max-w-none focus:outline-none outline-none focus:ring-0 ring-0 [&_*]:focus:outline-none [&_*]:outline-none [&_*]:focus:ring-0 [&_*]:ring-0 placeholder-gray-500 dark:placeholder-gray-400 [&_.ProseMirror]:p-0 [&_.ProseMirror]:outline-none [&_.ProseMirror]:text-base'
 								/>
 							</motion.div>
 						</div>
@@ -665,11 +665,11 @@ export const CommandBar: React.FC<CommandBarProps> = ({
 														</span>
 													)}
 													<div className='flex-1'>
-														<div className='text-sm font-medium'>
+														<div className='text-base font-medium'>
 															{item.label}
 														</div>
 														{item.description && (
-															<div className='text-xs text-muted-foreground'>
+															<div className='text-sm text-muted-foreground'>
 																{item.description}
 															</div>
 														)}
@@ -695,7 +695,7 @@ export const CommandBar: React.FC<CommandBarProps> = ({
 						<div className='p-1'>
 							<div className=''>
 								{filteredContents.fixedBottomGroup.heading && (
-									<div className='text-xs font-medium text-muted-foreground mb-2 px-2'>
+									<div className='text-sm font-medium text-muted-foreground mb-2 px-2'>
 										{filteredContents.fixedBottomGroup.heading}
 									</div>
 								)}
@@ -708,7 +708,7 @@ export const CommandBar: React.FC<CommandBarProps> = ({
 											}}
 											disabled={item.disabled}
 											className={cn(
-												'flex-1 flex items-center justify-between gap-1 p-2 rounded-md text-xs transition-colors cursor-pointer',
+												'flex-1 flex items-center justify-between gap-1 p-2 rounded-md text-sm transition-colors cursor-pointer',
 												'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
 												item.disabled && 'opacity-50 cursor-not-allowed',
 												// Default styling when no color is specified (match CommandItem)
@@ -734,7 +734,7 @@ export const CommandBar: React.FC<CommandBarProps> = ({
 												{item.icon && (
 													<span className='flex-shrink-0'>
 														{typeof item.icon === 'string' ? (
-															<span className='text-sm'>{item.icon}</span>
+															<span className='text-base'>{item.icon}</span>
 														) : (
 															item.icon
 														)}
@@ -773,7 +773,7 @@ export const CommandBar: React.FC<CommandBarProps> = ({
 									style={{ overflow: 'hidden' }}
 									className='border-t border-border'>
 									<div className='px-3'>
-										<div className='text-sm'>
+										<div className='text-base'>
 											{shouldShowMessage && messageToShow && (
 												<ChatRenderer message={messageToShow} />
 											)}
