@@ -64,6 +64,10 @@ const callAgent = createStep({
     ];
 
     let responseText = '';
+    // Set isTalking to true at the start of agent response
+    if (typeof window !== 'undefined' && window.cedar && window.cedar.setState) {
+      window.cedar.setState('isTalking', true);
+    }
     /**
      * Using Mastra streamVNext for enhanced streaming capabilities.
      * streamVNext returns a stream result that we can iterate over to get chunks
@@ -94,6 +98,11 @@ const callAgent = createStep({
       } else if (chunk.type === 'tool-result' || chunk.type === 'tool-call') {
         streamJSONEvent(streamController, chunk.type, chunk);
       }
+    }
+
+    // Set isTalking to false after agent response is complete
+    if (typeof window !== 'undefined' && window.cedar && window.cedar.setState) {
+      window.cedar.setState('isTalking', false);
     }
 
     const usage = await streamResult.usage;

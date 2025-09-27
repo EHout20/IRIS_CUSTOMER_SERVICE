@@ -120,21 +120,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-/* CLI Text Size Customizations */
-@layer components {
-  /* Make command bar input larger */
-  [data-slot="command-input"] {
-    @apply text-lg;
-  }
-  
-  /* Make command items larger */
-  [data-slot="command-item"] {
-    @apply text-base;
-  }
-  
-  /* Make command group headings larger */
-  [data-slot="command-group"] [cmdk-group-heading] {
-    @apply text-sm;
-  }
-}
