@@ -51,9 +51,6 @@ This project is an interactive AI-powered 3D chatbot designed to enhance the cus
 
 ## License
 MIT
-
-## Author
-GitHub Copilot & EHout20
 - Backend API: http://localhost:4111
 
 ## Project Architecture
