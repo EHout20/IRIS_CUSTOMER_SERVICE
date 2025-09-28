@@ -1,8 +1,10 @@
 'use client';
+
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { CedarCopilot, ProviderConfig } from 'cedar-os';
 import { messageRenderers } from '@/cedar/messageRenderers';
+import { SessionProvider } from 'next-auth/react'; // ✅ add this
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,14 +29,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <CedarCopilot
-          userId={'Test User'}
-          threadId={'Test Thread'}
-          llmProvider={llmProvider}
-          messageRenderers={messageRenderers}
-        >
-          {children}
-        </CedarCopilot>
+        <SessionProvider> {/* ✅ wrap CedarCopilot */}
+          <CedarCopilot
+            userId={'Test User'}
+            threadId={'Test Thread'}
+            llmProvider={llmProvider}
+            messageRenderers={messageRenderers}
+          >
+            {children}
+          </CedarCopilot>
+        </SessionProvider>
       </body>
     </html>
   );
