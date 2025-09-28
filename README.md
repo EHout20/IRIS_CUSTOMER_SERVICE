@@ -1,63 +1,59 @@
-# Cedar-OS + Mastra Starter Template
+# AI 3D Chatbot for Customer Service
 
-A blank starter template combining [Cedar-OS](https://cedar.ai) for the frontend AI interface and [Mastra](https://mastra.ai) for the backend agent orchestration.
+This project is an interactive AI-powered 3D chatbot designed to enhance the customer service experience. Built with React, Next.js, Three.js, and Cedar OS, it features a visually engaging 3D avatar that responds to user input, supports voice chat, and integrates with advanced backend agents.
 
 ## Features
+- **3D Avatar:** Real-time animated character using Three.js and FBX models
+- **AI Chatbot:** Natural language conversation powered by Cedar OS and Mastra agents
+- **Voice Chat:** ElevenLabs TTS integration for realistic voice responses
+- **Customizable UI:** Playful, modern interface with pastel gradients and floating particles
+- **Accessibility:** Transcript panel for all AI responses
+- **State Management:** Cedar OS for agent state, chat context, and UI control
 
-- **🤖 AI Chat Integration**: Built-in chat workflows powered by OpenAI through Mastra agents
-- **⚡ Real-time Streaming**: Server-sent events (SSE) for streaming AI responses
-- **🎨 Beautiful UI**: Cedar-OS components with 3D effects and modern design
-- **🔧 Type-safe Workflows**: Mastra-based backend with full TypeScript support
-- **📡 Dual API Modes**: Both streaming and non-streaming chat endpoints
+## Technologies Used
+- React & Next.js (frontend)
+- Three.js (3D rendering)
+- Cedar OS (agent state, chat logic)
+- Mastra & Composio (backend AI workflows)
+- ElevenLabs (voice synthesis)
+- Tailwind CSS (styling)
 
-## Quick Start
+## Getting Started
+1. Clone the repository:
+  ```bash
+  git clone https://github.com/EHout20/ai_anime_waifu.git
+  cd ai_anime_waifu/cedar-hackathon-starter
+  ```
+2. Install dependencies:
+  ```bash
+  npm install
+  # or
+  pnpm install
+  ```
+3. Set up environment variables in `.env` (see example in repo)
+4. Run the development server:
+  ```bash
+  npm run dev
+  ```
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-The fastest way to get started:
+## Project Structure
+- `src/app/` — Main Next.js app and layout
+- `src/components/FBXViewer.tsx` — 3D avatar viewer
+- `src/components/Transcript.tsx` — Accessibility transcript panel
+- `src/cedar/components/chatInput/ChatInput.tsx` — Chat input UI
+- `src/backend/` — Mastra backend, agent workflows, API routes
 
-```bash
-npx cedar-os-cli plant-seed
-```
+## Customization
+- Update 3D models in `public/models/actions/`
+- Change chat logic and agent workflows in `src/backend/src/mastra/workflows/`
+- Modify UI styles in `src/app/globals.css` and component files
 
-Then select this template when prompted. This will set up the entire project structure and dependencies automatically.
+## License
+MIT
 
-This template contains the Cedar chat connected to a mastra backend to demonstrate what endpoints need to be implemented.
-
-For more details, see the [Cedar Getting Started Guide](https://docs.cedarcopilot.com/getting-started/getting-started).
-
-## Manual Setup
-
-### Prerequisites
-
-- Node.js 18+
-- OpenAI API key
-- pnpm (recommended) or npm
-
-### Installation
-
-1. **Clone and install dependencies:**
-
-```bash
-git clone <repository-url>
-cd cedar-mastra-starter
-pnpm install && cd src/backend && pnpm install && cd ../..
-```
-
-2. **Set up environment variables:**
-   Create a `.env` file in the root directory:
-
-```env
-OPENAI_API_KEY=your-openai-api-key-here
-```
-
-3. **Start the development servers:**
-
-```bash
-npm run dev
-```
-
-This runs both the Next.js frontend and Mastra backend concurrently:
-
-- Frontend: http://localhost:3000
+## Author
+GitHub Copilot & EHout20
 - Backend API: http://localhost:4111
 
 ## Project Architecture
